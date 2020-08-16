@@ -10,6 +10,12 @@ if &cp || exists("g:loaded_fcitx") || (
       \ && !exists('$FCITX_SOCKET'))
   finish
 endif
+
+if executable("fcitx5-remote")
+  runtime so/fcitx.vim
+  finish
+endif
+
 if has("python3")
   let python3 = 1
 elseif has("python")

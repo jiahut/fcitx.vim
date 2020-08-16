@@ -1,0 +1,50 @@
+diff --git a/plugin/fcitx.vim b/plugin/fcitx.vim
+index d654d8e..19cf50c 100644
+--- a/plugin/fcitx.vim
++++ b/plugin/fcitx.vim
+@@ -10,6 +10,12 @@ if &cp || exists("g:loaded_fcitx") || (
+       \ && !exists('$FCITX_SOCKET'))
+   finish
+ endif
++
++if executable("fcitx5-remote")
++  runtime so/fcitx.vim
++  finish
++endif
++
+ if has("python3")
+   let python3 = 1
+ elseif has("python")
+diff --git a/so/fcitx.vim b/so/fcitx.vim
+index 6fc96bd..362ed17 100644
+--- a/so/fcitx.vim
++++ b/so/fcitx.vim
+@@ -11,7 +11,7 @@ endif
+ if !exists('$DISPLAY') || exists('$SSH_TTY') || has('gui_macvim')
+   finish
+ endif
+-if &cp || exists("g:loaded_fcitx") || !executable("fcitx-remote")
++if &cp || exists("g:loaded_fcitx") || !executable("fcitx5-remote")
+   finish
+ endif
+ let s:keepcpo = &cpo
+@@ -20,16 +20,16 @@ set cpo&vim
+ " ---------------------------------------------------------------------
+ " Functions:
+ function Fcitx2en()
+-  let inputstatus = system("fcitx-remote")
++  let inputstatus = system("fcitx5-remote")
+   if inputstatus == 2
+     let b:inputtoggle = 1
+-    call system("fcitx-remote -c")
++    call system("fcitx5-remote -c")
+   endif
+ endfunction
+ function Fcitx2zh()
+   try
+     if b:inputtoggle == 1
+-      call system("fcitx-remote -o")
++      call system("fcitx5-remote -o")
+       let b:inputtoggle = 0
+     endif
+   catch /inputtoggle/
